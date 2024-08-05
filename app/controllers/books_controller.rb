@@ -40,19 +40,25 @@ class BooksController < ApplicationController
 
   def destroy
   @book = Book.find(params[:id])
-  @book.destroy
-  flash[:success] = "Book was successfully destroyed."
-  redirect_to  book_path(@book)
+  logger.debug "Book to be destroyed: #{@book.inspect}"
+  if @book.destroy
+    flash[:success] = "Book was successfully destroyed."
+    logger.debug "Book destroyed successfully"
+  else
+    flash[:error] = "Failed to destroy the book."
+    logger.debug "Failed to destroy the book: #{@book.errors.full_messages}"
+  end
+  redirect_to books_path
 end
 
 
 
   private
-  def set_book
-    @book = Book.find(params[:id])
-  end
+def set_book
+  @book = Book.find(params[:id])
+end
 
   def book_params
     params.require(:book).permit(:title, :body)
   end
-end 
+end
