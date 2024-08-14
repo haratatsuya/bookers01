@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  root 'books#index'
+ root "books#top"
   resources :books, except: [:new]
 end
